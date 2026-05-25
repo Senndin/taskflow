@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+.eggs
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Environment files
+.env
+
+# Django
+db.sqlite3
+staticfiles/
+media/
+
+# IDE / OS
+.DS_Store
+*.swp
+pyrightconfig.json
+
+# Docs / plans
+*.md
