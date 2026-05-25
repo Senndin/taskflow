@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Sign Up — TaskFlow{% endblock %}
+{% block meta_description %}Create a free TaskFlow account and start organizing your tasks today.{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 62px);">
+  <div class="w-100" style="max-width: 440px; padding: 2rem 1rem;">
+
+    <!-- Header -->
+    <div class="text-center mb-4">
+      <div class="mb-3" style="font-size: 2.5rem;">
+        <i class="bi bi-person-plus" style="color: var(--tf-primary);"></i>
+      </div>
+      <h1 class="h3 fw-bold" style="color: var(--tf-text);">Create your account</h1>
+      <p class="text-muted">Start organising your tasks for free</p>
+    </div>
+
+    <!-- Card -->
+    <div class="tf-card p-4">
+      <form method="POST" action="{% url 'account_signup' %}" novalidate>
+        {% csrf_token %}
+
+        <!-- Non-field errors -->
+        {% if form.non_field_errors %}
+          <div class="tf-alert bg-danger-subtle text-danger-emphasis mb-3">
+            {% for error in form.non_field_errors %}
+              <div>{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <!-- Username -->
+        <div class="mb-3">
+          <label for="id_username" class="form-label fw-medium small">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="id_username"
+            class="tf-form-control {% if form.username.errors %}border-danger{% endif %}"
+            placeholder="Choose a username"
+            autocomplete="username"
+            value="{{ form.username.value|default:'' }}"
+            autofocus
+          >
+          {% if form.username.errors %}
+            <div class="text-danger small mt-1">{{ form.username.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Email (optional) -->
+        <div class="mb-3">
+          <label for="id_email" class="form-label fw-medium small">
+            Email <span class="text-muted fw-normal">(optional)</span>
+          </label>
+          <input
+            type="email"
+            name="email"
+            id="id_email"
+            class="tf-form-control {% if form.email.errors %}border-danger{% endif %}"
+            placeholder="you@example.com"
+            autocomplete="email"
+            value="{{ form.email.value|default:'' }}"
+          >
+          {% if form.email.errors %}
+            <div class="text-danger small mt-1">{{ form.email.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label for="id_password1" class="form-label fw-medium small">Password</label>
+          <input
+            type="password"
+            name="password1"
+            id="id_password1"
+            class="tf-form-control {% if form.password1.errors %}border-danger{% endif %}"
+            placeholder="Min. 8 characters"
+            autocomplete="new-password"
+          >
+          {% if form.password1.errors %}
+            <div class="text-danger small mt-1">{{ form.password1.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Confirm password -->
+        <div class="mb-4">
+          <label for="id_password2" class="form-label fw-medium small">Confirm password</label>
+          <input
+            type="password"
+            name="password2"
+            id="id_password2"
+            class="tf-form-control {% if form.password2.errors %}border-danger{% endif %}"
+            placeholder="Repeat password"
+            autocomplete="new-password"
+          >
+          {% if form.password2.errors %}
+            <div class="text-danger small mt-1">{{ form.password2.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="btn-signup" class="btn btn-tf-primary w-100">
+          <i class="bi bi-person-check me-1"></i> Create Account
+        </button>
+      </form>
+    </div>
+
+    <!-- Login link -->
+    <p class="text-center mt-3 text-muted small">
+      Already have an account?
+      <a href="{% url 'account_login' %}" class="fw-medium" style="color: var(--tf-primary);">Log in</a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}
