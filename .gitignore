@@ -158,6 +158,7 @@ env.bak/
 venv.bak/
 PLAN.md
 CLAUDE.md
+TASKS.md
 *.txt
 
 # Spyder project settings
