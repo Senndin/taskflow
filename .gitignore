@@ -156,6 +156,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+PLAN.md
+CLAUDE.md
+*.txt
 
 # Spyder project settings
 .spyderproject
