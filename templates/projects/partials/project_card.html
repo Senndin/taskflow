@@ -1,0 +1,86 @@
+<div class="tf-card" id="project-{{ project.pk }}">
+
+  <!-- Project header -->
+  <div class="tf-project-header">
+    <i class="bi bi-list-check fs-5"></i>
+    <span class="tf-project-title">{{ project.name }}</span>
+    <div class="ms-auto d-flex gap-2">
+      <a href="{% url 'projects:edit' project.pk %}"
+         class="btn btn-sm btn-link text-white p-0 opacity-75"
+         title="Edit project">
+        <i class="bi bi-pencil"></i>
+      </a>
+      <a href="{% url 'projects:delete' project.pk %}"
+         class="btn btn-sm btn-link text-white p-0 opacity-75"
+         title="Delete project">
+        <i class="bi bi-trash3"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Task list -->
+  <div id="task-list-{{ project.pk }}">
+    <table class="tf-task-table w-100">
+      <tbody>
+        {% for task in project.tasks.all %}
+          <tr id="task-{{ task.pk }}"
+              class="{% if task.is_done %}tf-task-done{% endif %}"
+              x-data="{ hovered: false }"
+              @mouseenter="hovered = true"
+              @mouseleave="hovered = false"
+              :class="{ 'tf-task-hover': hovered }">
+
+            <td style="width: 40px;">
+              <input type="checkbox"
+                     class="tf-checkbox"
+                     {% if task.is_done %}checked{% endif %}
+                     disabled
+                     title="Toggle coming in Day 2">
+            </td>
+
+            <td class="tf-task-title">{{ task.title }}</td>
+
+            <td style="width: 90px;">
+              <div class="tf-task-controls" x-show="hovered">
+                <button class="btn-icon" title="Move up" disabled>↑</button>
+                <button class="btn-icon" title="Move down" disabled>↓</button>
+                <span class="separator">|</span>
+                <button class="btn-icon" title="Edit" disabled>✏</button>
+                <span class="separator">|</span>
+                <button class="btn-icon danger" title="Delete" disabled>🗑</button>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="3" class="text-muted small text-center py-3" style="font-style: italic;">
+              No tasks yet — add one below
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Add task row (static placeholder — HTMX in Day 2) -->
+  <table class="tf-task-table w-100">
+    <tbody>
+      <tr class="tf-add-task-row">
+        <td colspan="3">
+          <div class="d-flex gap-2 align-items-center">
+            <i class="bi bi-plus text-muted"></i>
+            <input type="text"
+                   class="tf-add-task-input"
+                   placeholder="Start typing here to create a task…"
+                   disabled
+                   title="Task creation coming in Day 2">
+            <button class="btn btn-tf-primary btn-sm" disabled style="white-space: nowrap;">
+              Add Task
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

@@ -1,18 +1,14 @@
 """URL patterns for the projects app."""
 
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import path
-from django.views.generic import TemplateView
 
-
-class ProjectListPlaceholder(LoginRequiredMixin, TemplateView):
-    """Temporary placeholder view — will be replaced in Milestone 1.7."""
-
-    template_name = "projects/list.html"
-
+from . import views
 
 app_name = "projects"
 
 urlpatterns = [
-    path("", ProjectListPlaceholder.as_view(), name="list"),
+    path("", views.ProjectListView.as_view(), name="list"),
+    path("create/", views.ProjectCreateView.as_view(), name="create"),
+    path("<int:pk>/edit/", views.ProjectUpdateView.as_view(), name="edit"),
+    path("<int:pk>/delete/", views.ProjectDeleteView.as_view(), name="delete"),
 ]
