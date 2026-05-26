@@ -134,6 +134,25 @@ body {
   border-color: var(--tf-primary);
   box-shadow: 0 0 0 3px rgba(79,70,229,.12);
 }
+.tf-add-task-input.is-invalid {
+  border-color: var(--tf-danger);
+  box-shadow: 0 0 0 3px rgba(220,38,38,.12);
+}
+
+/* ── Small form-control for inline task edit ── */
+.tf-form-control-sm {
+  border: 1.5px solid var(--tf-border);
+  border-radius: var(--tf-radius);
+  padding: .3rem .6rem;
+  font-size: .875rem;
+  transition: border-color .18s, box-shadow .18s;
+  width: 100%;
+}
+.tf-form-control-sm:focus {
+  outline: none;
+  border-color: var(--tf-primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.12);
+}
 
 /* ── Buttons ── */
 .btn-tf-primary {

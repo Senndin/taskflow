@@ -28,7 +28,7 @@ class TaskCreateView(LoginRequiredMixin, View):
         if form.is_valid():
             task = create_task(project=project, title=form.cleaned_data["title"])
             return render(request, "tasks/partials/task_item.html", {"task": task})
-        return HttpResponse(status=422)
+        return render(request, "tasks/partials/task_create_error.html", {"form": form})
 
 
 class TaskUpdateView(LoginRequiredMixin, View):
