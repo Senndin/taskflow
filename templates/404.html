@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found — TaskFlow{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 62px);">
+  <div class="text-center" style="padding: 2rem 1rem;">
+    <div style="font-size: 5rem; font-weight: 800; color: var(--tf-primary); line-height: 1;">
+      404
+    </div>
+    <h1 class="h3 fw-bold mt-2 mb-2">Page not found</h1>
+    <p class="text-muted mb-4">
+      The page you are looking for doesn't exist or has been moved.
+    </p>
+    <a href="/projects/" class="btn btn-tf-primary">
+      <i class="bi bi-house me-1"></i> Go to Home
+    </a>
+  </div>
+</div>
+{% endblock %}

@@ -1,1 +1,215 @@
-/* TaskFlow — main stylesheet */
+/* ==========================================================================
+   TaskFlow — main.css
+   ========================================================================== */
+
+/* ── Design Tokens ── */
+:root {
+  --tf-primary:    #4f46e5;
+  --tf-primary-dk: #3730a3;
+  --tf-primary-lt: #eef2ff;
+  --tf-success:    #059669;
+  --tf-danger:     #dc2626;
+  --tf-warning-bg: #fef9c3;
+  --tf-surface:    #ffffff;
+  --tf-bg:         #f8faff;
+  --tf-text:       #1e1b4b;
+  --tf-muted:      #6b7280;
+  --tf-border:     #e5e7eb;
+  --tf-radius:     .6rem;
+  --tf-radius-lg:  1rem;
+  --tf-shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(79,70,229,.06);
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--tf-bg);
+  color: var(--tf-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Navbar ── */
+.tf-nav {
+  background: var(--tf-surface);
+  border-bottom: 1px solid var(--tf-border);
+  padding: .75rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.tf-nav .brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--tf-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  transition: opacity .15s;
+}
+.tf-nav .brand:hover { opacity: .8; }
+
+/* ── Cards ── */
+.tf-card {
+  background: var(--tf-surface);
+  border: 1px solid var(--tf-border);
+  border-radius: var(--tf-radius-lg);
+  box-shadow: var(--tf-shadow-sm);
+}
+
+/* ── Project card ── */
+.tf-project-header {
+  background: linear-gradient(135deg, var(--tf-primary), var(--tf-primary-dk));
+  color: #fff;
+  border-radius: var(--tf-radius-lg) var(--tf-radius-lg) 0 0;
+  padding: .85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.tf-project-header .tf-project-title {
+  font-weight: 600;
+  font-size: 1rem;
+  flex: 1;
+  margin: 0;
+}
+
+/* ── Task table ── */
+.tf-task-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tf-task-table td {
+  padding: .55rem .9rem;
+  border-bottom: 1px solid var(--tf-border);
+  vertical-align: middle;
+}
+.tf-task-table tr:last-child td { border-bottom: none; }
+.tf-task-table tr.tf-task-hover { background: var(--tf-warning-bg); }
+.tf-task-table tr.tf-task-done td { opacity: .5; }
+.tf-task-table tr.tf-task-done .tf-task-title { text-decoration: line-through; }
+
+/* ── Task controls (shown on hover) ── */
+.tf-task-controls {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: .2rem;
+  justify-content: flex-end;
+}
+.tf-task-controls .btn-icon {
+  background: none;
+  border: none;
+  padding: .25rem .3rem;
+  line-height: 1;
+  border-radius: var(--tf-radius);
+  color: var(--tf-muted);
+  cursor: pointer;
+  transition: color .15s, background .15s;
+  font-size: .9rem;
+}
+.tf-task-controls .btn-icon:hover { color: var(--tf-primary); background: var(--tf-primary-lt); }
+.tf-task-controls .btn-icon.danger:hover { color: var(--tf-danger); background: #fef2f2; }
+.tf-task-controls .separator { color: var(--tf-border); }
+
+/* ── Add Task input row ── */
+.tf-add-task-row td {
+  padding: .6rem .9rem;
+  background: #fafafa;
+}
+.tf-add-task-input {
+  border: 1.5px solid var(--tf-border);
+  border-radius: var(--tf-radius);
+  padding: .4rem .75rem;
+  font-size: .9rem;
+  width: 100%;
+  transition: border-color .18s, box-shadow .18s;
+  background: var(--tf-surface);
+}
+.tf-add-task-input:focus {
+  outline: none;
+  border-color: var(--tf-primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.12);
+}
+
+/* ── Buttons ── */
+.btn-tf-primary {
+  background: var(--tf-primary);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  border-radius: var(--tf-radius);
+  padding: .55rem 1.25rem;
+  transition: background .18s, transform .1s;
+  cursor: pointer;
+}
+.btn-tf-primary:hover {
+  background: var(--tf-primary-dk);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.btn-tf-primary:active { transform: translateY(0); }
+
+/* ── Add TODO List button ── */
+.btn-add-project {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  margin: 2rem auto;
+  padding: .85rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--tf-radius-lg);
+  border: 2px dashed var(--tf-primary);
+  background: var(--tf-primary-lt);
+  color: var(--tf-primary);
+  cursor: pointer;
+  transition: background .18s, transform .1s;
+  text-align: center;
+}
+.btn-add-project:hover {
+  background: var(--tf-primary);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ── Form controls (auth pages) ── */
+.tf-form-control {
+  border: 1.5px solid var(--tf-border);
+  border-radius: var(--tf-radius);
+  padding: .55rem .85rem;
+  font-size: .95rem;
+  transition: border-color .18s, box-shadow .18s;
+  width: 100%;
+}
+.tf-form-control:focus {
+  outline: none;
+  border-color: var(--tf-primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.15);
+}
+.tf-form-control.border-danger { border-color: var(--tf-danger); }
+
+/* ── Alerts ── */
+.tf-alert {
+  border-radius: var(--tf-radius);
+  padding: .7rem 1rem;
+  margin-bottom: 1rem;
+  font-size: .9rem;
+}
+
+/* ── Checkbox (task done toggle) ── */
+.tf-checkbox {
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+  accent-color: var(--tf-primary);
+}
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  .tf-nav { padding: .6rem 1rem; }
+  .tf-project-header { padding: .75rem 1rem; }
+}
