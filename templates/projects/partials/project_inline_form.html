@@ -1,0 +1,47 @@
+<!-- Inline project create/edit form — returned by HTMX GET requests -->
+<div id="project-form-card" class="tf-card">
+  <div class="tf-project-header">
+    <i class="bi bi-{% if object %}pencil-square{% else %}plus-square{% endif %} fs-5"></i>
+    <span class="tf-project-title">
+      {% if object %}Edit project{% else %}New TODO List{% endif %}
+    </span>
+    <button class="ms-auto btn btn-sm btn-link text-white p-0 opacity-75"
+            hx-get="{% url 'projects:list' %}"
+            hx-target="#project-form-card"
+            hx-swap="outerHTML"
+            title="Cancel">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <div class="p-3">
+    <form hx-post="{% if object %}{% url 'projects:htmx_edit' object.pk %}{% else %}{% url 'projects:htmx_create' %}{% endif %}"
+          hx-target="{% if object %}#project-{{ object.pk }}{% else %}#project-list{% endif %}"
+          hx-swap="{% if object %}outerHTML{% else %}beforeend{% endif %}"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-on::after-request="if(event.detail.successful && !{{ object|default:'false'|yesno:'true,false' }}) this.reset()"
+          novalidate>
+
+      <div class="d-flex gap-2 align-items-start">
+        <div style="flex: 1;">
+          {{ form.name }}
+          {% if form.name.errors %}
+            <div class="text-danger small mt-1">{{ form.name.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-tf-primary btn-sm">
+          {% if object %}Save{% else %}Create{% endif %}
+        </button>
+        {% if not object %}
+          <button type="button"
+                  class="btn btn-outline-secondary btn-sm"
+                  hx-get="{% url 'projects:list' %}"
+                  hx-target="#project-form-card"
+                  hx-swap="outerHTML">
+            Cancel
+          </button>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+</div>

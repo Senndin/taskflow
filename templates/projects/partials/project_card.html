@@ -6,16 +6,24 @@
     <i class="bi bi-list-check fs-5"></i>
     <span class="tf-project-title">{{ project.name }}</span>
     <div class="ms-auto d-flex gap-2">
-      <a href="{% url 'projects:edit' project.pk %}"
-         class="btn btn-sm btn-link text-white p-0 opacity-75"
-         title="Edit project">
+      <!-- Edit: HTMX → inline form replacing this card -->
+      <button class="btn btn-sm btn-link text-white p-0 opacity-75"
+              title="Edit project"
+              hx-get="{% url 'projects:htmx_edit' project.pk %}"
+              hx-target="#project-{{ project.pk }}"
+              hx-swap="outerHTML">
         <i class="bi bi-pencil"></i>
-      </a>
-      <a href="{% url 'projects:delete' project.pk %}"
-         class="btn btn-sm btn-link text-white p-0 opacity-75"
-         title="Delete project">
+      </button>
+      <!-- Delete: HTMX → remove card from DOM -->
+      <button class="btn btn-sm btn-link text-white p-0 opacity-75"
+              title="Delete project"
+              hx-post="{% url 'projects:htmx_delete' project.pk %}"
+              hx-target="#project-{{ project.pk }}"
+              hx-swap="outerHTML"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+              hx-confirm="Delete project &quot;{{ project.name }}&quot; and all its tasks?">
         <i class="bi bi-trash3"></i>
-      </a>
+      </button>
     </div>
   </div>
 
