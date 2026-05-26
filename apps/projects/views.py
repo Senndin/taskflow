@@ -7,6 +7,7 @@ from apps.tasks.models import Task
 
 from .forms import ProjectForm
 from .models import Project
+from .services import create_project, delete_project, update_project
 
 
 class ProjectListView(LoginRequiredMixin, ListView):
@@ -32,8 +33,10 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("projects:list")
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user
-        return super().form_valid(form)
+        create_project(owner=self.request.user, name=form.cleaned_data["name"])
+        from django.http import HttpResponseRedirect
+
+        return HttpResponseRedirect(self.success_url)
 
 
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
@@ -45,6 +48,12 @@ class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         return Project.objects.filter(owner=self.request.user)
 
+    def form_valid(self, form):
+        update_project(project=self.object, name=form.cleaned_data["name"])
+        from django.http import HttpResponseRedirect
+
+        return HttpResponseRedirect(self.success_url)
+
 
 class ProjectDeleteView(LoginRequiredMixin, DeleteView):
     model = Project
@@ -53,3 +62,9 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Project.objects.filter(owner=self.request.user)
+
+    def form_valid(self, form):
+        delete_project(project=self.object)
+        from django.http import HttpResponseRedirect
+
+        return HttpResponseRedirect(self.success_url)
