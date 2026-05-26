@@ -78,12 +78,12 @@
                 </button>
               </div>
               <!-- Inline validation error -->
-              <div x-show="error"
-                   x-transition
-                   class="d-flex align-items-center gap-1 mt-1"
-                   style="color: var(--tf-danger); font-size: .8rem; padding-left: 1.4rem;">
-                <i class="bi bi-exclamation-circle-fill"></i>
-                <span x-text="error"></span>
+              <div x-show="error" x-cloak x-transition>
+                <div class="d-flex align-items-center gap-1 mt-1"
+                     style="color: var(--tf-danger); font-size: .8rem; padding-left: 1.4rem;">
+                  <i class="bi bi-exclamation-circle-fill"></i>
+                  <span x-text="error"></span>
+                </div>
               </div>
             </form>
           </div>
