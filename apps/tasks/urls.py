@@ -1,7 +1,5 @@
 """URL patterns for the tasks app."""
 
-from django.urls import path
-
 app_name = "tasks"
 
 urlpatterns = [

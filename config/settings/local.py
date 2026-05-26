@@ -3,6 +3,9 @@ Local development settings.
 Uses SQLite by default (easy start), DEBUG=True.
 """
 
+import dj_database_url
+from decouple import config
+
 from .base import *  # noqa: F401, F403
 
 DEBUG = True
@@ -14,9 +17,6 @@ ALLOWED_HOSTS = ["*"]
 # DATABASE — SQLite for local development (no Docker required)
 # Switch to PostgreSQL by setting DATABASE_URL in .env
 # ---------------------------------------------------------------------------
-import dj_database_url
-from decouple import config
-
 _db_url = config("DATABASE_URL", default=f"sqlite:///{ BASE_DIR / 'db.sqlite3' }")  # noqa: F405
 DATABASES = {"default": dj_database_url.parse(_db_url, conn_max_age=600)}
 
