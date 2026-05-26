@@ -84,3 +84,23 @@ class TaskMoveView(LoginRequiredMixin, View):
             move_task_down(task)
         tasks = task.project.tasks.order_by("order")
         return render(request, "tasks/partials/task_list.html", {"tasks": tasks})
+
+
+class TaskMoveUpView(LoginRequiredMixin, View):
+    """POST: move task one position up → return updated task list."""
+
+    def post(self, request, pk: int):
+        task = get_object_or_404(Task, pk=pk, project__owner=request.user)
+        move_task_up(task)
+        tasks = task.project.tasks.order_by("order")
+        return render(request, "tasks/partials/task_list.html", {"tasks": tasks})
+
+
+class TaskMoveDownView(LoginRequiredMixin, View):
+    """POST: move task one position down → return updated task list."""
+
+    def post(self, request, pk: int):
+        task = get_object_or_404(Task, pk=pk, project__owner=request.user)
+        move_task_down(task)
+        tasks = task.project.tasks.order_by("order")
+        return render(request, "tasks/partials/task_list.html", {"tasks": tasks})

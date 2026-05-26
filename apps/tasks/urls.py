@@ -12,4 +12,6 @@ urlpatterns = [
     path("<int:pk>/delete/", views.TaskDeleteView.as_view(), name="delete"),
     path("<int:pk>/toggle/", views.TaskToggleView.as_view(), name="toggle"),
     path("<int:pk>/move/<str:direction>/", views.TaskMoveView.as_view(), name="move"),
+    path("<int:pk>/move-up/", views.TaskMoveUpView.as_view(), name="move_up"),
+    path("<int:pk>/move-down/", views.TaskMoveDownView.as_view(), name="move_down"),
 ]

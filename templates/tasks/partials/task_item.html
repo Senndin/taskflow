@@ -34,18 +34,18 @@
       <!-- Move up -->
       <button class="btn-icon"
               title="Move up"
-              hx-post="{% url 'tasks:move' task.pk 'up' %}"
+              hx-post="{% url 'tasks:move_up' task.pk %}"
               hx-target="#task-list-{{ task.project_id }}"
               hx-swap="innerHTML"
-              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>↑</button>
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>&#8593;</button>
 
       <!-- Move down -->
       <button class="btn-icon"
               title="Move down"
-              hx-post="{% url 'tasks:move' task.pk 'down' %}"
+              hx-post="{% url 'tasks:move_down' task.pk %}"
               hx-target="#task-list-{{ task.project_id }}"
               hx-swap="innerHTML"
-              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>↓</button>
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>&#8595;</button>
 
       <span class="separator">|</span>
 
