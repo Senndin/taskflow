@@ -1,0 +1,9 @@
+{% for task in tasks %}
+  {% include "tasks/partials/task_item.html" %}
+{% empty %}
+  <tr id="task-list-empty">
+    <td colspan="3" class="text-muted small text-center py-3" style="font-style: italic;">
+      No tasks yet — add one below
+    </td>
+  </tr>
+{% endfor %}

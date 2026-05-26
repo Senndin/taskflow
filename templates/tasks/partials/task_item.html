@@ -1,0 +1,71 @@
+<tr id="task-{{ task.pk }}"
+    class="{% if task.is_done %}tf-task-done{% endif %}"
+    x-data="{ hovered: false }"
+    @mouseenter="hovered = true"
+    @mouseleave="hovered = false"
+    :class="{ 'tf-task-hover': hovered }">
+
+  <!-- Checkbox: toggle done -->
+  <td style="width: 40px;">
+    <input type="checkbox"
+           class="tf-checkbox"
+           {% if task.is_done %}checked{% endif %}
+           hx-post="{% url 'tasks:toggle' task.pk %}"
+           hx-target="#task-{{ task.pk }}"
+           hx-swap="outerHTML"
+           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+           title="Mark as done">
+  </td>
+
+  <!-- Title -->
+  <td class="tf-task-title">
+    {{ task.title }}
+    {% if task.deadline %}
+      <span class="text-muted small ms-2" style="font-size: .75rem;">
+        <i class="bi bi-calendar3"></i> {{ task.deadline|date:"d M" }}
+      </span>
+    {% endif %}
+  </td>
+
+  <!-- Controls (shown on hover via Alpine.js) -->
+  <td style="width: 110px;">
+    <div class="tf-task-controls" x-show="hovered" x-transition>
+
+      <!-- Move up -->
+      <button class="btn-icon"
+              title="Move up"
+              hx-post="{% url 'tasks:move' task.pk 'up' %}"
+              hx-target="#task-list-{{ task.project_id }}"
+              hx-swap="innerHTML"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>↑</button>
+
+      <!-- Move down -->
+      <button class="btn-icon"
+              title="Move down"
+              hx-post="{% url 'tasks:move' task.pk 'down' %}"
+              hx-target="#task-list-{{ task.project_id }}"
+              hx-swap="innerHTML"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>↓</button>
+
+      <span class="separator">|</span>
+
+      <!-- Edit -->
+      <button class="btn-icon"
+              title="Edit task"
+              hx-get="{% url 'tasks:edit' task.pk %}"
+              hx-target="#task-{{ task.pk }}"
+              hx-swap="outerHTML">✏</button>
+
+      <span class="separator">|</span>
+
+      <!-- Delete -->
+      <button class="btn-icon danger"
+              title="Delete task"
+              hx-post="{% url 'tasks:delete' task.pk %}"
+              hx-target="#task-{{ task.pk }}"
+              hx-swap="outerHTML"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+              hx-confirm="Delete this task?">🗑</button>
+    </div>
+  </td>
+</tr>

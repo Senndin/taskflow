@@ -1,0 +1,37 @@
+<tr id="task-{{ task.pk }}">
+  <td colspan="3" style="padding: .4rem .9rem;">
+    <form hx-post="{% url 'tasks:edit' task.pk %}"
+          hx-target="#task-{{ task.pk }}"
+          hx-swap="outerHTML"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          class="d-flex gap-2 align-items-center flex-wrap">
+
+      <!-- Title -->
+      <div style="flex: 1; min-width: 140px;">
+        {{ form.title }}
+        {% if form.title.errors %}
+          <div class="text-danger small">{{ form.title.errors|join:", " }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Priority -->
+      <div style="width: 100px;">
+        {{ form.priority }}
+      </div>
+
+      <!-- Deadline -->
+      <div style="width: 130px;">
+        {{ form.deadline }}
+      </div>
+
+      <!-- Save / Cancel -->
+      <button type="submit" class="btn btn-tf-primary btn-sm">Save</button>
+      <button type="button"
+              class="btn btn-outline-secondary btn-sm"
+              hx-get="{% url 'tasks:edit' task.pk %}"
+              hx-target="#task-{{ task.pk }}"
+              hx-swap="outerHTML"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>✕</button>
+    </form>
+  </td>
+</tr>

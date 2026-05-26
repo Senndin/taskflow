@@ -1,3 +1,4 @@
+{% load static %}
 <div class="tf-card" id="project-{{ project.pk }}">
 
   <!-- Project header -->
@@ -18,66 +19,44 @@
     </div>
   </div>
 
-  <!-- Task list -->
-  <div id="task-list-{{ project.pk }}">
-    <table class="tf-task-table w-100">
-      <tbody>
-        {% for task in project.tasks.all %}
-          <tr id="task-{{ task.pk }}"
-              class="{% if task.is_done %}tf-task-done{% endif %}"
-              x-data="{ hovered: false }"
-              @mouseenter="hovered = true"
-              @mouseleave="hovered = false"
-              :class="{ 'tf-task-hover': hovered }">
+  <!-- Task list — HTMX swaps go here -->
+  <table class="tf-task-table w-100">
+    <tbody id="task-list-{{ project.pk }}">
+      {% for task in project.tasks.all %}
+        {% include "tasks/partials/task_item.html" %}
+      {% empty %}
+        <tr id="task-list-empty">
+          <td colspan="3" class="text-muted small text-center py-3" style="font-style: italic;">
+            No tasks yet — add one below
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 
-            <td style="width: 40px;">
-              <input type="checkbox"
-                     class="tf-checkbox"
-                     {% if task.is_done %}checked{% endif %}
-                     disabled
-                     title="Toggle coming in Day 2">
-            </td>
-
-            <td class="tf-task-title">{{ task.title }}</td>
-
-            <td style="width: 90px;">
-              <div class="tf-task-controls" x-show="hovered">
-                <button class="btn-icon" title="Move up" disabled>↑</button>
-                <button class="btn-icon" title="Move down" disabled>↓</button>
-                <span class="separator">|</span>
-                <button class="btn-icon" title="Edit" disabled>✏</button>
-                <span class="separator">|</span>
-                <button class="btn-icon danger" title="Delete" disabled>🗑</button>
-              </div>
-            </td>
-          </tr>
-        {% empty %}
-          <tr>
-            <td colspan="3" class="text-muted small text-center py-3" style="font-style: italic;">
-              No tasks yet — add one below
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Add task row (static placeholder — HTMX in Day 2) -->
+  <!-- Add task form (HTMX inline) -->
   <table class="tf-task-table w-100">
     <tbody>
       <tr class="tf-add-task-row">
         <td colspan="3">
-          <div class="d-flex gap-2 align-items-center">
-            <i class="bi bi-plus text-muted"></i>
-            <input type="text"
-                   class="tf-add-task-input"
-                   placeholder="Start typing here to create a task…"
-                   disabled
-                   title="Task creation coming in Day 2">
-            <button class="btn btn-tf-primary btn-sm" disabled style="white-space: nowrap;">
-              Add Task
-            </button>
-          </div>
+          <form hx-post="{% url 'tasks:create' project.pk %}"
+                hx-target="#task-list-{{ project.pk }}"
+                hx-swap="beforeend"
+                hx-on::after-request="this.reset()"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+            <div class="d-flex gap-2 align-items-center">
+              <i class="bi bi-plus text-muted"></i>
+              <input type="text"
+                     name="title"
+                     class="tf-add-task-input"
+                     placeholder="Start typing here to create a task…"
+                     autocomplete="off"
+                     required>
+              <button type="submit" class="btn btn-tf-primary btn-sm" style="white-space: nowrap;">
+                Add Task
+              </button>
+            </div>
+          </form>
         </td>
       </tr>
     </tbody>
