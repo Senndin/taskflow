@@ -14,7 +14,8 @@
     <button class="btn btn-tf-primary btn-sm"
             hx-get="{% url 'projects:htmx_create' %}"
             hx-target="#project-list"
-            hx-swap="beforeend">
+            hx-swap="beforeend"
+            hx-on::before-request="document.getElementById('empty-state')?.remove()">
       <i class="bi bi-plus-lg me-1"></i> New Project
     </button>
   </div>
@@ -32,14 +33,14 @@
                 hx-get="{% url 'projects:htmx_create' %}"
                 hx-target="#project-list"
                 hx-swap="beforeend"
-                hx-on::after-request="document.getElementById('empty-state')?.remove()">
+                hx-on::before-request="document.getElementById('empty-state')?.remove()">
           <i class="bi bi-plus-lg me-1"></i> Create First Project
         </button>
       </div>
     {% endfor %}
   </div>
 
-  <!-- "+ Add TODO List" button (always visible at the bottom when there are projects) -->
+  <!-- "+" button (visible at the bottom when there are projects) -->
   {% if projects %}
     <button class="btn-add-project mt-3"
             hx-get="{% url 'projects:htmx_create' %}"

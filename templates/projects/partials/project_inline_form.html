@@ -1,25 +1,36 @@
 <!-- Inline project create/edit form — returned by HTMX GET requests -->
-<div id="project-form-card" class="tf-card">
+<div id="{% if object %}project-{{ object.pk }}{% else %}project-form-card{% endif %}" class="tf-card">
   <div class="tf-project-header">
     <i class="bi bi-{% if object %}pencil-square{% else %}plus-square{% endif %} fs-5"></i>
     <span class="tf-project-title">
       {% if object %}Edit project{% else %}New TODO List{% endif %}
     </span>
-    <button class="ms-auto btn btn-sm btn-link text-white p-0 opacity-75"
-            hx-get="{% url 'projects:list' %}"
-            hx-target="#project-form-card"
-            hx-swap="outerHTML"
-            title="Cancel">
-      <i class="bi bi-x-lg"></i>
-    </button>
+    {% if object %}
+      <!-- Edit mode cancel: fetch the card back from server -->
+      <button class="ms-auto btn btn-sm btn-link text-white p-0 opacity-75"
+              type="button"
+              hx-get="{% url 'projects:htmx_card' object.pk %}"
+              hx-target="#project-{{ object.pk }}"
+              hx-swap="outerHTML"
+              title="Cancel">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    {% else %}
+      <!-- Create mode cancel: just remove from DOM -->
+      <button class="ms-auto btn btn-sm btn-link text-white p-0 opacity-75"
+              type="button"
+              onclick="document.getElementById('project-form-card').remove()"
+              title="Cancel">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    {% endif %}
   </div>
 
   <div class="p-3">
     <form hx-post="{% if object %}{% url 'projects:htmx_edit' object.pk %}{% else %}{% url 'projects:htmx_create' %}{% endif %}"
-          hx-target="{% if object %}#project-{{ object.pk }}{% else %}#project-list{% endif %}"
-          hx-swap="{% if object %}outerHTML{% else %}beforeend{% endif %}"
+          hx-target="{% if object %}#project-{{ object.pk }}{% else %}#project-form-card{% endif %}"
+          hx-swap="outerHTML"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-          hx-on::after-request="if(event.detail.successful && !{{ object|default:'false'|yesno:'true,false' }}) this.reset()"
           novalidate>
 
       <div class="d-flex gap-2 align-items-start">
@@ -32,12 +43,20 @@
         <button type="submit" class="btn btn-tf-primary btn-sm">
           {% if object %}Save{% else %}Create{% endif %}
         </button>
-        {% if not object %}
+        {% if object %}
+          <!-- Edit mode cancel button (in form row) -->
           <button type="button"
                   class="btn btn-outline-secondary btn-sm"
-                  hx-get="{% url 'projects:list' %}"
-                  hx-target="#project-form-card"
+                  hx-get="{% url 'projects:htmx_card' object.pk %}"
+                  hx-target="#project-{{ object.pk }}"
                   hx-swap="outerHTML">
+            Cancel
+          </button>
+        {% else %}
+          <!-- Create mode cancel button -->
+          <button type="button"
+                  class="btn btn-outline-secondary btn-sm"
+                  onclick="document.getElementById('project-form-card').remove()">
             Cancel
           </button>
         {% endif %}

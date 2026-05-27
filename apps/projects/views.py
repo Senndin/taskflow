@@ -101,6 +101,22 @@ class ProjectHtmxDeleteView(LoginRequiredMixin, View):
         return HttpResponse("")
 
 
+class ProjectHtmxCardView(LoginRequiredMixin, View):
+    """GET: return project_card.html fragment (used by Cancel in edit mode)."""
+
+    def get(self, request, pk):
+        project = get_object_or_404(
+            Project.objects.prefetch_related(
+                Prefetch("tasks", queryset=Task.objects.order_by("order"))
+            ),
+            pk=pk,
+            owner=request.user,
+        )
+        return render(
+            request, "projects/partials/project_card.html", {"project": project}
+        )
+
+
 # ---------------------------------------------------------------------------
 # Classic full-page fallback views (kept for non-JS environments)
 # ---------------------------------------------------------------------------

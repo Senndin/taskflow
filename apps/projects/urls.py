@@ -14,6 +14,7 @@ urlpatterns = [
     path(
         "htmx/<int:pk>/edit/", views.ProjectHtmxUpdateView.as_view(), name="htmx_edit"
     ),
+    path("htmx/<int:pk>/card/", views.ProjectHtmxCardView.as_view(), name="htmx_card"),
     path(
         "htmx/<int:pk>/delete/",
         views.ProjectHtmxDeleteView.as_view(),
