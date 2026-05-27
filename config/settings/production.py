@@ -4,11 +4,16 @@ DEBUG=False, whitenoise for static, PostgreSQL via DATABASE_URL.
 """
 
 import dj_database_url
-from decouple import config
+from decouple import Csv, config
 
 from .base import *  # noqa: F401, F403
 
 DEBUG = False
+
+# ---------------------------------------------------------------------------
+# HOSTS — set ALLOWED_HOSTS=yourdomain.com in production .env
+# ---------------------------------------------------------------------------
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 # ---------------------------------------------------------------------------
 # DATABASE — PostgreSQL in production
@@ -17,9 +22,15 @@ DATABASES = {
     "default": dj_database_url.parse(
         config("DATABASE_URL"),
         conn_max_age=600,
-        ssl_require=True,
+        ssl_require=config("DB_SSL_REQUIRE", default=True, cast=bool),
     )
 }
+
+# ---------------------------------------------------------------------------
+# STATIC — whitenoise serves compressed files from STATIC_ROOT
+# (already configured in base.py via CompressedManifestStaticFilesStorage)
+# Run `python manage.py collectstatic --no-input` before starting gunicorn.
+# ---------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------
 # SECURITY
@@ -33,6 +44,21 @@ CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
+
+# ---------------------------------------------------------------------------
+# LOGGING — errors to stderr, picked up by Docker / platform logs
+# ---------------------------------------------------------------------------
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+}
 
 # ---------------------------------------------------------------------------
 # Email — configure via env in production

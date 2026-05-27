@@ -24,4 +24,5 @@ COPY . .
 
 EXPOSE 8000
 
+# Default: dev server (overridden by docker-compose.prod.yml to use gunicorn)
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
