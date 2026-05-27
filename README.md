@@ -25,6 +25,7 @@
 
 ## Getting Started (Docker)
 
+### Development (Hot-reload, local database)
 ```bash
 # 1. Clone the repository
 git clone https://github.com/Senndin/taskflow.git
@@ -47,8 +48,17 @@ docker-compose exec web python manage.py createsuperuser
 open http://localhost:8000
 ```
 
-### Stop the project
+### Production
+Uses Gunicorn, collects static files via WhiteNoise, and disables debug mode.
+```bash
+# Provide a secure .env for production
+cp .env.production.example .env
 
+# Run using the production override file
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+### Stop the project
 ```bash
 docker-compose down        # stop and remove containers (data is preserved)
 docker-compose down -v     # stop and also remove database data
