@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Log In — TaskFlow{% endblock %}
+{% block meta_description %}Log in to your TaskFlow account to manage your tasks.{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 62px);">
+  <div class="w-100" style="max-width: 420px; padding: 2rem 1rem;">
+
+    <!-- Header -->
+    <div class="text-center mb-4">
+      <div class="mb-3" style="font-size: 2.5rem;">
+        <i class="bi bi-check2-square" style="color: var(--tf-primary);"></i>
+      </div>
+      <h1 class="h3 fw-bold" style="color: var(--tf-text);">Welcome back</h1>
+      <p class="text-muted">Sign in to continue to TaskFlow</p>
+    </div>
+
+    <!-- Card -->
+    <div class="tf-card p-4">
+      <form method="POST" action="{% url 'account_login' %}" novalidate>
+        {% csrf_token %}
+
+        <!-- Non-field errors -->
+        {% if form.non_field_errors %}
+          <div class="tf-alert bg-danger-subtle text-danger-emphasis mb-3">
+            {% for error in form.non_field_errors %}
+              <div>{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <!-- Username -->
+        <div class="mb-3">
+          <label for="id_login" class="form-label fw-medium small">Username</label>
+          <input
+            type="text"
+            name="login"
+            id="id_login"
+            class="tf-form-control {% if form.login.errors %}border-danger{% endif %}"
+            placeholder="Your username"
+            autocomplete="username"
+            value="{{ form.login.value|default:'' }}"
+            autofocus
+          >
+          {% if form.login.errors %}
+            <div class="text-danger small mt-1">{{ form.login.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Password -->
+        <div class="mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label for="id_password" class="form-label fw-medium small mb-0">Password</label>
+            <a href="{% url 'account_reset_password' %}" class="small text-muted text-decoration-none" style="font-size: .8rem;">
+              Forgot password?
+            </a>
+          </div>
+          <input
+            type="password"
+            name="password"
+            id="id_password"
+            class="tf-form-control {% if form.password.errors %}border-danger{% endif %}"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          >
+          {% if form.password.errors %}
+            <div class="text-danger small mt-1">{{ form.password.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Remember me -->
+        <div class="form-check mb-4">
+          <input class="form-check-input" type="checkbox" name="remember" id="id_remember" value="True"
+            {% if form.remember.value %}checked{% endif %}>
+          <label class="form-check-label small text-muted" for="id_remember">Remember me</label>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="btn-login" class="btn btn-tf-primary w-100">
+          <i class="bi bi-box-arrow-in-right me-1"></i> Log In
+        </button>
+      </form>
+    </div>
+
+    <!-- Signup link -->
+    <p class="text-center mt-3 text-muted small">
+      Don't have an account?
+      <a href="{% url 'account_signup' %}" class="fw-medium" style="color: var(--tf-primary);">Sign up for free</a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

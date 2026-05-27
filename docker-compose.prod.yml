@@ -1,0 +1,26 @@
+# Production override for docker-compose.
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# This file overrides only what differs in production:
+#   - Uses gunicorn instead of runserver
+#   - Sets DJANGO_SETTINGS_MODULE=config.settings.production
+#   - Runs collectstatic before starting the server
+#   - Removes the source volume mount (uses baked-in code from image)
+
+services:
+  web:
+    # No volume mount in prod — code is baked into the image
+    volumes: []
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+    command: >
+      sh -c "python manage.py migrate --no-input &&
+             python manage.py collectstatic --no-input &&
+             gunicorn config.wsgi:application
+               --bind 0.0.0.0:8000
+               --workers 2
+               --threads 2
+               --worker-class gthread
+               --timeout 60
+               --access-logfile -
+               --error-logfile -"

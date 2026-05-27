@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{% if object %}Edit Project{% else %}New Project{% endif %} — TaskFlow{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 62px);">
+  <div class="w-100" style="max-width: 480px; padding: 2rem 1rem;">
+
+    <div class="text-center mb-4">
+      <i class="bi bi-{% if object %}pencil-square{% else %}plus-square{% endif %}"
+         style="font-size: 2rem; color: var(--tf-primary);"></i>
+      <h1 class="h4 fw-bold mt-2 mb-0">
+        {% if object %}Edit "{{ object.name }}"{% else %}New TODO List{% endif %}
+      </h1>
+    </div>
+
+    <div class="tf-card p-4">
+      <form method="POST" novalidate>
+        {% csrf_token %}
+
+        <div class="mb-4">
+          <label for="id_name" class="form-label fw-medium small">Project name</label>
+          {{ form.name }}
+          {% if form.name.errors %}
+            <div class="text-danger small mt-1">{{ form.name.errors|join:", " }}</div>
+          {% endif %}
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" id="btn-save-project" class="btn btn-tf-primary flex-grow-1">
+            <i class="bi bi-check-lg me-1"></i>
+            {% if object %}Save Changes{% else %}Create Project{% endif %}
+          </button>
+          <a href="{% url 'projects:list' %}" class="btn btn-outline-secondary">
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

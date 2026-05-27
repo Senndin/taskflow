@@ -1,0 +1,355 @@
+/* ==========================================================================
+   TaskFlow — main.css
+   ========================================================================== */
+
+/* ── Design Tokens ── */
+:root {
+  --tf-primary:    #4f46e5;
+  --tf-primary-dk: #3730a3;
+  --tf-primary-lt: #eef2ff;
+  --tf-success:    #059669;
+  --tf-danger:     #dc2626;
+  --tf-warning-bg: #fef9c3;
+  --tf-surface:    #ffffff;
+  --tf-bg:         #f8faff;
+  --tf-text:       #1e1b4b;
+  --tf-muted:      #6b7280;
+  --tf-border:     #e5e7eb;
+  --tf-radius:     .6rem;
+  --tf-radius-lg:  1rem;
+  --tf-shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(79,70,229,.06);
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Hide Alpine.js elements before framework initialises (prevents flash) */
+[x-cloak] { display: none !important; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--tf-bg);
+  color: var(--tf-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Navbar ── */
+.tf-nav {
+  background: linear-gradient(135deg, var(--tf-primary) 0%, var(--tf-primary-dk) 100%);
+  border-bottom: none;
+  padding: .75rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(79,70,229,.25);
+}
+.tf-nav .brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  transition: opacity .15s;
+}
+.tf-nav .brand:hover { opacity: .85; }
+
+/* Navbar buttons override for white on blue bg */
+.tf-nav .btn-outline-secondary {
+  color: rgba(255,255,255,.85);
+  border-color: rgba(255,255,255,.4);
+}
+.tf-nav .btn-outline-secondary:hover {
+  color: var(--tf-primary);
+  background: #fff;
+  border-color: #fff;
+}
+.tf-nav .text-muted { color: rgba(255,255,255,.7) !important; }
+.tf-nav .btn-outline-primary {
+  color: #fff;
+  border-color: rgba(255,255,255,.5);
+}
+.tf-nav .btn-outline-primary:hover {
+  background: rgba(255,255,255,.15);
+  border-color: #fff;
+  color: #fff;
+}
+.tf-nav .btn-tf-primary {
+  background: rgba(255,255,255,.2);
+  border: 1px solid rgba(255,255,255,.4);
+  color: #fff;
+  font-weight: 600;
+  padding: .3rem .85rem;
+}
+.tf-nav .btn-tf-primary:hover {
+  background: rgba(255,255,255,.35);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+/* ── Cards ── */
+.tf-card {
+  background: var(--tf-surface);
+  border: 1px solid var(--tf-border);
+  border-radius: var(--tf-radius-lg);
+  box-shadow: var(--tf-shadow-sm);
+}
+
+/* ── Project card ── */
+.tf-project-header {
+  background: linear-gradient(135deg, var(--tf-primary), var(--tf-primary-dk));
+  color: #fff;
+  border-radius: var(--tf-radius-lg) var(--tf-radius-lg) 0 0;
+  padding: .85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.tf-project-header .tf-project-title {
+  font-weight: 600;
+  font-size: 1rem;
+  flex: 1;
+  margin: 0;
+}
+
+/* ── Task table ── */
+.tf-task-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tf-task-table td {
+  padding: .55rem .9rem;
+  border-bottom: 1px solid var(--tf-border);
+  vertical-align: middle;
+}
+.tf-task-table tr:last-child td { border-bottom: none; }
+.tf-task-table tr.tf-task-hover { background: var(--tf-warning-bg); }
+.tf-task-table tr.tf-task-done td { opacity: .5; }
+.tf-task-table tr.tf-task-done .tf-task-title { text-decoration: line-through; }
+
+/* ── Task controls (shown on hover) ── */
+.tf-task-controls {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: .2rem;
+  justify-content: flex-end;
+}
+.tf-task-controls .btn-icon {
+  background: none;
+  border: none;
+  padding: .25rem .3rem;
+  line-height: 1;
+  border-radius: var(--tf-radius);
+  color: var(--tf-muted);
+  cursor: pointer;
+  transition: color .15s, background .15s;
+  font-size: .9rem;
+}
+.tf-task-controls .btn-icon:hover { color: var(--tf-primary); background: var(--tf-primary-lt); }
+.tf-task-controls .btn-icon.danger:hover { color: var(--tf-danger); background: #fef2f2; }
+.tf-task-controls .separator { color: var(--tf-border); }
+
+/* ── Add Task input row ── */
+.tf-add-task-row td {
+  padding: .6rem .9rem;
+  background: #fafafa;
+}
+.tf-add-task-input {
+  border: 1.5px solid var(--tf-border);
+  border-radius: var(--tf-radius);
+  padding: .4rem .75rem;
+  font-size: .9rem;
+  width: 100%;
+  transition: border-color .18s, box-shadow .18s;
+  background: var(--tf-surface);
+}
+.tf-add-task-input:focus {
+  outline: none;
+  border-color: var(--tf-primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.12);
+}
+.tf-add-task-input.is-invalid {
+  border-color: var(--tf-danger);
+  box-shadow: 0 0 0 3px rgba(220,38,38,.12);
+}
+
+/* ── Small form-control for inline task edit ── */
+.tf-form-control-sm {
+  border: 1.5px solid var(--tf-border);
+  border-radius: var(--tf-radius);
+  padding: .3rem .6rem;
+  font-size: .875rem;
+  transition: border-color .18s, box-shadow .18s;
+  width: 100%;
+}
+.tf-form-control-sm:focus {
+  outline: none;
+  border-color: var(--tf-primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.12);
+}
+
+/* ── Buttons ── */
+.btn-tf-primary {
+  background: var(--tf-primary);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  border-radius: var(--tf-radius);
+  padding: .55rem 1.25rem;
+  transition: background .18s, transform .1s;
+  cursor: pointer;
+}
+.btn-tf-primary:hover {
+  background: var(--tf-primary-dk);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.btn-tf-primary:active { transform: translateY(0); }
+
+/* ── Add TODO List button ── */
+.btn-add-project {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  width: 100%;
+  max-width: 520px;
+  margin: 2.5rem auto 1rem;
+  padding: 1rem 1.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: var(--tf-radius-lg);
+  border: 2px solid var(--tf-primary);
+  background: linear-gradient(135deg, var(--tf-primary) 0%, var(--tf-primary-dk) 100%);
+  color: #fff;
+  cursor: pointer;
+  transition: box-shadow .2s, transform .15s, opacity .15s;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(79,70,229,.3);
+  letter-spacing: .01em;
+}
+.btn-add-project:hover {
+  box-shadow: 0 6px 20px rgba(79,70,229,.45);
+  transform: translateY(-2px);
+  opacity: .93;
+  color: #fff;
+}
+.btn-add-project:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(79,70,229,.3);
+}
+
+/* ── Form controls (auth pages) ── */
+.tf-form-control {
+  border: 1.5px solid var(--tf-border);
+  border-radius: var(--tf-radius);
+  padding: .55rem .85rem;
+  font-size: .95rem;
+  transition: border-color .18s, box-shadow .18s;
+  width: 100%;
+}
+.tf-form-control:focus {
+  outline: none;
+  border-color: var(--tf-primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,.15);
+}
+.tf-form-control.border-danger { border-color: var(--tf-danger); }
+
+/* ── Alerts ── */
+.tf-alert {
+  border-radius: var(--tf-radius);
+  padding: .7rem 1rem;
+  margin-bottom: 1rem;
+  font-size: .9rem;
+}
+
+/* ── Checkbox (task done toggle) ── */
+.tf-checkbox {
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+  accent-color: var(--tf-primary);
+}
+
+/* ── Responsive ── */
+
+/* Tablet (≤ 768px) */
+@media (max-width: 768px) {
+  /* Reduce container padding */
+  .container { padding-left: 1rem; padding-right: 1rem; }
+
+  /* Project header: wrap title and actions */
+  .tf-project-header {
+    flex-wrap: wrap;
+    gap: .4rem;
+    padding: .75rem 1rem;
+  }
+
+  /* Task controls: always visible on touch devices */
+  .tf-task-controls { display: flex !important; }
+
+  /* Task table: reduce padding for smaller screens */
+  .tf-task-table td { padding: .45rem .7rem; }
+
+  /* Add task input: stack vertically */
+  .tf-add-task-row .d-flex {
+    flex-wrap: wrap;
+    gap: .4rem;
+  }
+  .tf-add-task-input { font-size: .875rem; }
+
+  /* Add project button: full width */
+  .btn-add-project { max-width: 100%; }
+}
+
+/* Mobile (≤ 576px) */
+@media (max-width: 576px) {
+  .tf-nav {
+    padding: .6rem 1rem;
+    flex-wrap: wrap;
+    gap: .5rem;
+  }
+  .tf-nav .d-flex { flex-wrap: wrap; gap: .4rem; }
+
+  .tf-project-header { padding: .7rem .9rem; }
+  .tf-project-header .tf-project-title { font-size: .95rem; }
+
+  /* Task table: tighter on mobile */
+  .tf-task-table td { padding: .4rem .6rem; }
+  .tf-task-table td:last-child { width: auto; }
+
+  /* Task controls: show inline always (no hover on mobile) */
+  .tf-task-controls {
+    display: flex !important;
+    gap: .15rem;
+  }
+  .tf-task-controls .btn-icon { padding: .2rem .25rem; font-size: .8rem; }
+  .tf-task-controls .separator { display: none; }
+
+  /* Add task row: vertical stack */
+  .tf-add-task-row .d-flex {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .tf-add-task-row .btn-tf-primary {
+    width: 100%;
+    margin-top: .25rem;
+  }
+
+  /* Project card: no card shadow on mobile → feels native */
+  .tf-card { border-radius: var(--tf-radius); }
+
+  /* Add project button */
+  .btn-add-project {
+    max-width: 100%;
+    padding: .85rem 1rem;
+    font-size: 1rem;
+    margin: 1.5rem auto 1rem;
+  }
+
+  /* Page heading */
+  h1.h4 { font-size: 1.05rem; }
+}

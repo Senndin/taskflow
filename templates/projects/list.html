@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}My Projects — TaskFlow{% endblock %}
+{% block meta_description %}Manage all your projects and tasks in one place.{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 760px;">
+
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h1 class="h4 fw-bold mb-0" style="color: var(--tf-text);">
+      <i class="bi bi-kanban me-2" style="color: var(--tf-primary);"></i>My Projects
+    </h1>
+    <!-- New Project button — HTMX appends inline form to list -->
+    <button class="btn btn-tf-primary btn-sm"
+            hx-get="{% url 'projects:htmx_create' %}"
+            hx-target="#project-list"
+            hx-swap="beforeend"
+            hx-on::before-request="document.getElementById('empty-state')?.remove()">
+      <i class="bi bi-plus-lg me-1"></i> New Project
+    </button>
+  </div>
+
+  <!-- Project list container -->
+  <div id="project-list" class="d-flex flex-column gap-3">
+    {% for project in projects %}
+      {% include "projects/partials/project_card.html" %}
+    {% empty %}
+      <!-- Empty state: shown when no projects yet -->
+      <div id="empty-state" class="text-center py-5">
+        <i class="bi bi-inbox" style="font-size: 3rem; color: var(--tf-border);"></i>
+        <p class="text-muted mt-3 mb-4">No projects yet. Create your first TODO list!</p>
+        <button class="btn btn-tf-primary"
+                hx-get="{% url 'projects:htmx_create' %}"
+                hx-target="#project-list"
+                hx-swap="beforeend"
+                hx-on::before-request="document.getElementById('empty-state')?.remove()">
+          <i class="bi bi-plus-lg me-1"></i> Create First Project
+        </button>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- "+" button (visible at the bottom when there are projects) -->
+  {% if projects %}
+    <button class="btn-add-project mt-3"
+            hx-get="{% url 'projects:htmx_create' %}"
+            hx-target="#project-list"
+            hx-swap="beforeend">
+      <i class="bi bi-plus-lg me-1"></i> Add TODO List
+    </button>
+  {% endif %}
+
+</div>
+{% endblock %}

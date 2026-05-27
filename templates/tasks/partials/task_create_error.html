@@ -1,0 +1,12 @@
+<!-- Temporary error row inserted into tbody via HTMX, auto-removes after 3s -->
+<tr id="task-create-error"
+    x-data
+    x-init="setTimeout(() => $el.remove(), 3000)">
+  <td colspan="3">
+    <div class="d-flex align-items-center gap-2 px-2 py-1"
+         style="color: var(--tf-danger); font-size: .85rem;">
+      <i class="bi bi-exclamation-circle-fill"></i>
+      {% for error in form.title.errors %}{{ error }}{% empty %}Task title is required.{% endfor %}
+    </div>
+  </td>
+</tr>

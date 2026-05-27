@@ -1,0 +1,95 @@
+{% load static %}
+<div class="tf-card" id="project-{{ project.pk }}">
+
+  <!-- Project header -->
+  <div class="tf-project-header">
+    <i class="bi bi-list-check fs-5"></i>
+    <span class="tf-project-title">{{ project.name }}</span>
+    <div class="ms-auto d-flex gap-2">
+      <!-- Edit: HTMX → inline form replacing this card -->
+      <button class="btn btn-sm btn-link text-white p-0 opacity-75"
+              title="Edit project"
+              hx-get="{% url 'projects:htmx_edit' project.pk %}"
+              hx-target="#project-{{ project.pk }}"
+              hx-swap="outerHTML">
+        <i class="bi bi-pencil"></i>
+      </button>
+      <!-- Delete: HTMX → remove card from DOM -->
+      <button class="btn btn-sm btn-link text-white p-0 opacity-75"
+              title="Delete project"
+              hx-post="{% url 'projects:htmx_delete' project.pk %}"
+              hx-target="#project-{{ project.pk }}"
+              hx-swap="outerHTML"
+              hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+              hx-confirm="Delete project &quot;{{ project.name }}&quot; and all its tasks?">
+        <i class="bi bi-trash3"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Task list — HTMX swaps go here -->
+  <table class="tf-task-table w-100">
+    <tbody id="task-list-{{ project.pk }}">
+      {% for task in project.tasks.all %}
+        {% include "tasks/partials/task_item.html" %}
+      {% empty %}
+        <tr id="task-list-empty">
+          <td colspan="3" class="text-muted small text-center py-3" style="font-style: italic;">
+            No tasks yet — add one below
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Add task form with Alpine.js client-side validation -->
+  <table class="tf-task-table w-100">
+    <tbody>
+      <tr class="tf-add-task-row">
+        <td colspan="3">
+          <div x-data="{ error: '' }">
+            <form hx-post="{% url 'tasks:create' project.pk %}"
+                  hx-target="#task-list-{{ project.pk }}"
+                  hx-swap="beforeend"
+                  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                  hx-on::after-request="if (event.detail.successful) { this.reset(); $data.error = ''; }"
+                  @submit.prevent="
+                    const inp = $el.querySelector('[name=title]');
+                    if (!inp.value.trim()) {
+                      error = 'Task title cannot be empty.';
+                      inp.focus();
+                      return;
+                    }
+                    error = '';
+                    htmx.trigger($el, 'submit');
+                  ">
+              <div class="d-flex gap-2 align-items-center">
+                <i class="bi bi-plus text-muted"></i>
+                <input type="text"
+                       name="title"
+                       class="tf-add-task-input"
+                       :class="{ 'is-invalid': error }"
+                       @blur="if ($event.target.value.trim()) error = ''"
+                       @input="error = ''"
+                       placeholder="Start typing here to create a task…"
+                       autocomplete="off">
+                <button type="submit" class="btn btn-tf-primary btn-sm" style="white-space: nowrap;">
+                  Add Task
+                </button>
+              </div>
+              <!-- Inline validation error -->
+              <div x-show="error" x-cloak x-transition>
+                <div class="d-flex align-items-center gap-1 mt-1"
+                     style="color: var(--tf-danger); font-size: .8rem; padding-left: 1.4rem;">
+                  <i class="bi bi-exclamation-circle-fill"></i>
+                  <span x-text="error"></span>
+                </div>
+              </div>
+            </form>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
