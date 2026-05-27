@@ -21,11 +21,11 @@ _db_url = config("DATABASE_URL", default=f"sqlite:///{ BASE_DIR / 'db.sqlite3' }
 DATABASES = {"default": dj_database_url.parse(_db_url, conn_max_age=600)}
 
 # ---------------------------------------------------------------------------
-# django-debug-toolbar (optional, install separately if needed)
+# django-debug-toolbar — N+1 query inspection
 # ---------------------------------------------------------------------------
-# INSTALLED_APPS += ["debug_toolbar"]
-# MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
-# INTERNAL_IPS = ["127.0.0.1"]
+INSTALLED_APPS += ["debug_toolbar"]  # noqa: F405
+MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE  # noqa: F405
+INTERNAL_IPS = ["127.0.0.1"]
 
 # ---------------------------------------------------------------------------
 # Email — print to console in dev
