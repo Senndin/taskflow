@@ -20,8 +20,11 @@
       </div>
 
       <!-- Deadline -->
-      <div style="width: 130px;">
+      <div style="width: 160px;">
         {{ form.deadline }}
+        {% if form.deadline.errors %}
+          <div class="text-danger small mt-1">{{ form.deadline.errors|join:", " }}</div>
+        {% endif %}
       </div>
 
       <!-- Save / Cancel -->
